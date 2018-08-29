@@ -1,0 +1,51 @@
+let score = 0
+let missile_speed = 0
+let missile_pos_x = 0
+let item = 0
+input.onButtonPressed(Button.B, () => {
+    led.unplot(item, 4)
+    item += 1
+    led.plotBrightness(item, 4, 255)
+    score += 1
+    missile_speed += -5
+})
+function game_over()  {
+    basic.clearScreen()
+    led.setBrightness(255)
+    basic.showIcon(IconNames.Skull)
+    led.setBrightness(255)
+    basic.pause(500)
+    basic.clearScreen()
+    basic.showNumber(score)
+    basic.pause(1000)
+    basic.clearScreen()
+    score = 0
+    missile_speed = 220
+    item = 0
+}
+input.onButtonPressed(Button.A, () => {
+    led.unplot(item, 4)
+    item += -1
+    led.plotBrightness(item, 4, 255)
+    score += 1
+    missile_speed += -5
+})
+item = 0
+missile_speed = 220
+basic.forever(() => {
+    missile_pos_x = Math.random(5)
+    for (let missile_pos_y = 0; missile_pos_y <= 4; missile_pos_y++) {
+        led.plotBrightness(missile_pos_x, missile_pos_y, 255)
+        basic.pause(missile_speed)
+        led.unplot(missile_pos_x, missile_pos_y)
+        if (item == missile_pos_x && missile_pos_y == 4) {
+            game_over()
+        }
+        if (item > 4) {
+            game_over()
+        }
+        if (item < 0) {
+            game_over()
+        }
+    }
+})
